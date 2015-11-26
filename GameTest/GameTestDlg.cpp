@@ -135,6 +135,7 @@ BOOL CGameTestDlg::OnInitDialog()
 		g_hbmScenery[i] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	}
 
+	// 加载地图图片资源
 	CClientDC dc(this);
 	m_hDCBitmap = CreateCompatibleDC(dc);
 	m_hDCMemBitmap = CreateCompatibleDC(dc);
