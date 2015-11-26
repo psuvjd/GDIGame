@@ -1,8 +1,12 @@
 # GDIGame
-	build(1, n, 1);
-	int l = 2, r = n;
-	for(int i = 0; i < 30; i++) {
-		int m = (l + r) >> 1;
-		if (cal(m)) l = m;
-		else r = m - 1;
-	}
+###GDI游戏开发
+#####现已实现：  
++ 双缓冲加载图片资源  
++ 人物类：CMyCreature
++ 景物类：CMyScenery
++ 人物、景物之间的遮挡关系
+  
+***
+#####有待实现：  
++ 游戏世界
++ 画面闪烁黑背景
