@@ -300,9 +300,6 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 	delete drawSeq;
 
 	TransparentBlt(dc.m_hDC, 0, 0, m_iWidth, m_iHeight, m_hDCMemBitmap, 0, 0, RGB(255, 255, 255));
-	//DeleteDC(hDCBitmap);
-	//DeleteDC(hDCMemBitmap);
-	//DeleteObject(hTmpBitmap);
 	g_index = (g_index + 1) % 10;
 	CDialog::OnTimer(nIDEvent);
 }
