@@ -4,6 +4,5 @@ GDI游戏开发
 >    for(int i = 1; i <= n; i++) {
 >        scanf("%d", a + i);
 >    }
-***
 
 GDI游戏开发
