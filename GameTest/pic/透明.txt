@@ -1,0 +1,40 @@
+
+
+void CIcomeDlg::TransparentBlt( HDC hDesDC,	
+					 int iDesX, int iDesY,
+					 int iWide, int iHigh,
+					 HDC hSurDC,
+					 int iSurX,int iSurY,
+					 UINT iMaskCol
+					 )
+{	
+	HBITMAP hTmpBmp   = CreateCompatibleBitmap( hDesDC, iWide, iHigh );
+	HBITMAP hMaskBmp   = CreateBitmap( iWide, iHigh, 1, 1, NULL );	
+	HDC		hTmpDC    = CreateCompatibleDC( hDesDC );
+	HDC		hMaskDC    = CreateCompatibleDC( hDesDC );
+	HBITMAP hOldTmpBmp = (HBITMAP)SelectObject( hTmpDC, hTmpBmp );
+	HBITMAP hOldMaskBmp = (HBITMAP)SelectObject( hMaskDC, hMaskBmp );
+
+	BitBlt( hTmpDC, 0, 0, iWide, iHigh, hSurDC, iSurX, iSurY, SRCCOPY );
+
+	COLORREF colOld = SetBkColor( hTmpDC, iMaskCol );
+	BitBlt( hMaskDC, 0, 0, iWide, iHigh, hTmpDC, 0, 0, SRCCOPY );
+	SetBkColor( hTmpDC, colOld );
+
+	BitBlt( hMaskDC, 0, 0, iWide, iHigh, hMaskDC, 0, 0, NOTSRCCOPY );
+
+	BitBlt( hTmpDC, 0, 0, iWide, iHigh, hMaskDC, 0, 0, SRCAND );
+
+
+	BitBlt( hMaskDC, 0, 0, iWide, iHigh, hMaskDC, 0, 0, NOTSRCCOPY );
+	BitBlt( hDesDC, iDesX, iDesY, iWide, iHigh, hMaskDC, 0, 0, SRCAND );
+	BitBlt( hDesDC, iDesX, iDesY, iWide, iHigh, hTmpDC, 0, 0, SRCPAINT);
+
+	SelectObject(hTmpDC, hOldTmpBmp);				
+	DeleteDC(hTmpDC);
+	SelectObject(hMaskDC, hOldMaskBmp);
+	DeleteDC(hMaskDC);
+
+	DeleteObject(hTmpBmp);
+	DeleteObject(hMaskBmp);
+}
