@@ -234,7 +234,7 @@ void CGameTestDlg::OnBnClickedCancel()
 void CGameTestDlg::OnBnClickedOk3()
 {
 	g_index = 0;
-	SetTimer(0, 70, NULL);
+	SetTimer(0, 40, NULL);
 }
 
 int CGameTestDlg::GetBitmapIndex(CMyCreature MyCreature, int idx) {
@@ -260,8 +260,7 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 	// ¼ÓÔØµØÍ¼
 	SelectObject(m_hDCBitmap, m_hBitmap);
 	SelectObject(m_hDCMemBitmap, m_hEmptyBitmap);
-	// SelectObject(m_hDCMemBitmap, hTmpBitmap);
-	SelectObject(m_hDCMemBitmap, m_hBitmap);
+	//SelectObject(m_hDCMemBitmap, m_hBitmap);
 	GetObject(m_hBitmap, sizeof(ds), &ds);
 	int iWidth = bm.biWidth;
 	int iHeight = bm.biHeight;
@@ -300,7 +299,7 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 	drawSeq->clear();
 	delete drawSeq;
 
-	TransparentBlt(dc.m_hDC, 0, 0, m_iWidth, m_iHeight, m_hDCMemBitmap, 0, 0, RGB(255, 255, 255));
+	BitBlt(dc.m_hDC, 0, 0, m_iWidth, m_iHeight, m_hDCMemBitmap, 0, 0, SRCCOPY);
 	g_index = (g_index + 1) % 10;
 	CDialog::OnTimer(nIDEvent);
 }
