@@ -7,6 +7,8 @@
 #include "MyScenery.h"
 
 #define FREQUENCY_TIMER 50
+//#define PATH_PIC "pic/"
+#define PATH_PIC "../GameTest/pic/"
 
 
 // CGameTestDlg ¶Ô»°¿ò

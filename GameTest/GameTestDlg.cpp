@@ -113,7 +113,8 @@ BOOL CGameTestDlg::OnInitDialog()
 	srand(unsigned(time(NULL)));
 
 	// 加载人物图片资源
-	CString path = "pic/per/";
+	CString path = PATH_PIC;
+	path += "per/";
 	for(int i = 0; i < 400; i++) {
 		CString name;
 		name.Format("c%05d.bmp", i);
@@ -121,7 +122,8 @@ BOOL CGameTestDlg::OnInitDialog()
 	}
 
 	// 加载动物图片资源
-	path = "pic/兽/";
+	path = PATH_PIC;
+	path += "兽/";
 	for (int i = 0; i < TYPE_MAX; i++) {
 		if (i != HORSE) {
 			for (int j = 0; j < 120; j++) {
@@ -145,7 +147,8 @@ BOOL CGameTestDlg::OnInitDialog()
 	}
 
 	// 加载景物图片资源
-	path = "pic/景/";
+	path = PATH_PIC;
+	path += "景/";
 	for (int i = 0; i < 97; i++) {
 		CString name;
 		name.Format("c%05d.bmp", i);
@@ -153,10 +156,12 @@ BOOL CGameTestDlg::OnInitDialog()
 	}
 
 	// 加载地图图片资源
+	path = PATH_PIC;
+	path += "diA.bmp";
 	CClientDC dc(this);
 	m_hDCBitmap = CreateCompatibleDC(dc);
 	m_hDCMemBitmap = CreateCompatibleDC(dc);
-	m_hBitmap = (HBITMAP)LoadImage(AfxGetInstanceHandle(), "pic/diA.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	m_hBitmap = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	m_hEmptyBitmap = CreateCompatibleBitmap(dc, m_iWidth = 640, m_iHeight = 480);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
