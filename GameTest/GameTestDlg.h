@@ -3,7 +3,10 @@
 
 #pragma once
 #include "MyCreature.h"
+#include "MyAnimal.h"
 #include "MyScenery.h"
+
+#define FREQUENCY_TIMER 50
 
 
 // CGameTestDlg ¶Ô»°¿ò
@@ -44,7 +47,7 @@ public:
 public:
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 public:
-	int GetBitmapIndex(CMyCreature MyCreature, int idx);
+	int GetBitmapIndex(const CMyCreature&, int);
 	afx_msg void OnBnClickedAddscenery();
 private:
 	long m_iWidth;
@@ -53,4 +56,6 @@ private:
 	HDC m_hDCMemBitmap;
 	HBITMAP m_hBitmap;
 	HBITMAP m_hEmptyBitmap; // ¿Õ°×±³¾°
+public:
+	afx_msg void OnBnClickedAddanimal();
 };

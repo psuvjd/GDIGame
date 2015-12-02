@@ -1,6 +1,8 @@
 #pragma once
 class CMyScenery
 {
+private:
+	const int ScePicAmount = 97;
 	int m_iX;
 	int m_iY;
 	int m_iID;

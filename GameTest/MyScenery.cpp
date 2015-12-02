@@ -10,7 +10,7 @@ CMyScenery::CMyScenery(int nX, int nY, int nID)
 {
 	m_iX = nX;
 	m_iY = nY;
-	m_iID = nID;
+	m_iID = nID % ScePicAmount;
 }
 
 int CMyScenery::GetX(void) const
@@ -40,14 +40,13 @@ void CMyScenery::SetY(int nY)
 
 void CMyScenery::SetID(int nID)
 {
-	m_iID = nID;
+	m_iID = nID % ScePicAmount;
 }
 
 bool CMyScenery::operator<(const CMyScenery & rhs) const
 {
 	return m_iY < rhs.m_iY;
 }
-
 
 CMyScenery::~CMyScenery()
 {

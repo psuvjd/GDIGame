@@ -16,6 +16,7 @@ class CMyCreature
 {
 private:
 	const double c_dEps = 1e-4;
+protected:
 	int m_iX;
 	int m_iY;
 	int m_iDesX;
@@ -25,14 +26,14 @@ private:
 	int m_iFaceTo;
 public:
 	CMyCreature(void);
-	int GetX(void);
-	int GetY(void);
-	int GetDesX(void);
-	int GetDesY(void);
+	int GetX(void) const;
+	int GetY(void) const;
+	int GetDesX(void) const;
+	int GetDesY(void) const;
 	void SetDes(int iX, int iY);
 	void Move(int idx);
-	int GetFace(void);
-	int GetState(void);
+	int GetFace(void) const;
+	int GetState(void) const;
 public:
 	~CMyCreature(void);
 };

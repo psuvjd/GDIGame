@@ -14,12 +14,13 @@ using namespace std;
 #define new DEBUG_NEW
 #endif
 
-
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 int g_index;
-HBITMAP g_hbmPerson[800];
+HBITMAP g_hbmPerson[125];
 HBITMAP g_hbmScenery[97];
+HBITMAP g_hbmAnimal[TYPE_MAX][125];
 vector<CMyScenery> g_vScenery;
+vector<CMyAnimal> g_vAnimal;
 
 class CAboutDlg : public CDialog
 {
@@ -49,11 +50,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 END_MESSAGE_MAP()
 
-
 // CGameTestDlg 对话框
-
-
-
 
 CGameTestDlg::CGameTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CGameTestDlg::IDD, pParent)
@@ -78,6 +75,7 @@ BEGIN_MESSAGE_MAP(CGameTestDlg, CDialog)
 	ON_WM_TIMER()
 	ON_WM_LBUTTONDBLCLK()
 	ON_BN_CLICKED(IDC_AddScenery, &CGameTestDlg::OnBnClickedAddscenery)
+	ON_BN_CLICKED(IDC_AddAnimal, &CGameTestDlg::OnBnClickedAddanimal)
 END_MESSAGE_MAP()
 
 
@@ -116,22 +114,41 @@ BOOL CGameTestDlg::OnInitDialog()
 
 	// 加载人物图片资源
 	CString path = "pic/per/";
-	for(int i = 0; i < 800; i++) {
-		CString name = "c";
-		char str[10];
-		sprintf(str, "%05d.bmp", i);
-		CString x = str;
-		name = name + x;
+	for(int i = 0; i < 400; i++) {
+		CString name;
+		name.Format("c%05d.bmp", i);
 		g_hbmPerson[i] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+	}
+
+	// 加载动物图片资源
+	path = "pic/兽/";
+	for (int i = 0; i < TYPE_MAX; i++) {
+		if (i != HORSE) {
+			for (int j = 0; j < 120; j++) {
+				CString name;
+				name.Format("c%05d.bmp", i * 400 + j);
+				g_hbmAnimal[i][j] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+			}
+		}
+		else {
+			for (int j = 0; j < 40; j++) {
+				CString name;
+				name.Format("c%05d.bmp", i * 400 + j);
+				g_hbmAnimal[i][j] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+			}
+			for (int j = 120; j < 120 + 80; j++) {
+				CString name;
+				name.Format("c%05d.bmp", i * 400 + j);
+				g_hbmAnimal[i][j-80] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+			}
+		}
 	}
 
 	// 加载景物图片资源
 	path = "pic/景/";
 	for (int i = 0; i < 97; i++) {
-		CString name = "c";
-		char str[10];
-		sprintf(str, "%05d.bmp", i);
-		name += CString(str);
+		CString name;
+		name.Format("c%05d.bmp", i);
 		g_hbmScenery[i] = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path + name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	}
 
@@ -234,16 +251,16 @@ void CGameTestDlg::OnBnClickedCancel()
 void CGameTestDlg::OnBnClickedOk3()
 {
 	g_index = 0;
-	SetTimer(0, 40, NULL);
+	SetTimer(0, FREQUENCY_TIMER, NULL);
 }
 
-int CGameTestDlg::GetBitmapIndex(CMyCreature MyCreature, int idx) {
+int CGameTestDlg::GetBitmapIndex(const CMyCreature& nCreature, int idx) {
 	int res;
-	if (MyCreature.GetState() == STAND) {
-		res = MyCreature.GetFace() + idx % 5;
+	if (nCreature.GetState() == STAND) {
+		res = nCreature.GetFace() + idx % 5;
 	}
 	else {
-		res = MyCreature.GetFace() * 2 + 40 + idx % 10;
+		res = nCreature.GetFace() * 2 + 40 + idx % 10;
 	}
 	return res;
 }
@@ -251,8 +268,11 @@ int CGameTestDlg::GetBitmapIndex(CMyCreature MyCreature, int idx) {
 void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	// 人物移动
+	// 移动
 	m_MyCreature.Move(g_index);
+	for (int i = 0; i < g_vAnimal.size(); i++) {
+		g_vAnimal[i].AI(FREQUENCY_TIMER);
+	}
 	CClientDC dc(this);
 	DIBSECTION ds;
 	BITMAPINFOHEADER &bm = ds.dsBmih;
@@ -260,7 +280,6 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 	// 加载地图
 	SelectObject(m_hDCBitmap, m_hBitmap);
 	SelectObject(m_hDCMemBitmap, m_hEmptyBitmap);
-	//SelectObject(m_hDCMemBitmap, m_hBitmap);
 	GetObject(m_hBitmap, sizeof(ds), &ds);
 	int iWidth = bm.biWidth;
 	int iHeight = bm.biHeight;
@@ -275,8 +294,14 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 	}
 	GetObject(g_hbmPerson[GetBitmapIndex(m_MyCreature, g_index)], sizeof(ds), &ds);
 	drawSeq->push_back({ m_MyCreature.GetY() + bm.biHeight, iScenerySize });
+
+	int id = iScenerySize + 1;
+	for (auto i : g_vAnimal) {
+		GetObject(g_hbmAnimal[GetBitmapIndex(i, g_index)], sizeof ds, &ds);
+		drawSeq->push_back({ i.GetY() + bm.biHeight, id++ });
+	}
 	sort(drawSeq->begin(), drawSeq->end());
-	for (int i = 0; i <= iScenerySize; i++) {
+	for (int i = 0; i < id; i++) {
 		int iID = (*drawSeq)[i].second;
 		if (iID == iScenerySize) {
 			// 加载人物
@@ -286,6 +311,16 @@ void CGameTestDlg::OnTimer(UINT_PTR nIDEvent)
 			SelectObject(m_hDCBitmap, g_hbmPerson[GetBitmapIndex(m_MyCreature, g_index)]);
 			SelectObject(m_hDCMemBitmap, g_hbmPerson[GetBitmapIndex(m_MyCreature, g_index)]);
 			TransparentBlt(m_hDCMemBitmap, m_MyCreature.GetX(), m_MyCreature.GetY(), iWidth, iHeight, m_hDCBitmap, 0, 0, RGB(255, 255, 255));
+		}
+		else if (iID > iScenerySize) {
+			iID -= iScenerySize + 1;
+			// 加载动物
+			GetObject(g_hbmAnimal[g_vAnimal[iID].GetType()][GetBitmapIndex(g_vAnimal[iID], g_index)], sizeof ds, &ds);
+			iWidth = bm.biWidth;
+			iHeight = bm.biHeight;
+			SelectObject(m_hDCBitmap, g_hbmAnimal[g_vAnimal[iID].GetType()][GetBitmapIndex(g_vAnimal[iID], g_index)]);
+			SelectObject(m_hDCMemBitmap, g_hbmAnimal[g_vAnimal[iID].GetType()][GetBitmapIndex(g_vAnimal[iID], g_index)]);
+			TransparentBlt(m_hDCMemBitmap, g_vAnimal[iID].GetX(), g_vAnimal[iID].GetY(), iWidth, iHeight, m_hDCBitmap, 0, 0, RGB(255, 255, 255));
 		}
 		else {
 			SelectObject(m_hDCBitmap, g_hbmScenery[g_vScenery[iID].GetID()]);
@@ -356,7 +391,13 @@ void CGameTestDlg::OnBnClickedAddscenery()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CMyScenery tmpScenery(rand() % 510, rand() % 300, rand() % 97);
-	// CMyScenery tmpScenery(rand() % 510, rand() % 300, 62);
-	//g_msScenery.insert(tmpScenery);
 	g_vScenery.push_back(tmpScenery);
+}
+
+
+void CGameTestDlg::OnBnClickedAddanimal()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CMyAnimal tmpAnimal;
+	g_vAnimal.push_back(tmpAnimal);
 }

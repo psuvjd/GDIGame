@@ -7,26 +7,26 @@ CMyCreature::CMyCreature(void)
 	m_iY = m_iDesY = 0;
 	m_iState = STAND;
 	m_iFaceTo = SOUTH;
-	m_dSpeed = 15;
+	m_dSpeed = 10;
 }
 
 CMyCreature::~CMyCreature(void)
 {
 }
 
-int CMyCreature::GetX() {
+int CMyCreature::GetX(void) const {
 	return m_iX;
 }
 
-int CMyCreature::GetY() {
+int CMyCreature::GetY(void) const {
 	return m_iY;
 }
 
-int CMyCreature::GetDesX() {
+int CMyCreature::GetDesX(void) const {
 	return m_iDesX;
 }
 
-int CMyCreature::GetDesY() {
+int CMyCreature::GetDesY(void) const {
 	return m_iDesY;
 }
 
@@ -84,12 +84,12 @@ void CMyCreature::Move(int idx) {
 	else m_iState = STAND;
 }
 
-int CMyCreature::GetFace(void)
+int CMyCreature::GetFace(void) const
 {
 	return m_iFaceTo;
 }
 
-int CMyCreature::GetState(void)
+int CMyCreature::GetState(void) const
 {
 	return m_iState;
 }
