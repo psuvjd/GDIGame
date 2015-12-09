@@ -164,6 +164,9 @@ BOOL CGameTestDlg::OnInitDialog()
 	m_hBitmap = (HBITMAP)LoadImage(AfxGetInstanceHandle(), path, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	m_hEmptyBitmap = CreateCompatibleBitmap(dc, m_iWidth = 640, m_iHeight = 480);
 
+	
+	VERIFY(m_dsBgSound.Create(IDR_WAVE1));
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -221,6 +224,7 @@ void CGameTestDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	//OnOK();
+	m_dsBgSound.Play();
 	CClientDC dc(this);
 	HDC hdc = dc.m_hDC;
 	HPEN penRed = ::CreatePen(PS_SOLID, 5, RGB(200, 200, 254));

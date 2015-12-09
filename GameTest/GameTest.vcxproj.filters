@@ -33,6 +33,9 @@
     <ClCompile Include="MyAnimal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DirectSound.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTest.h">
@@ -56,6 +59,9 @@
     <ClInclude Include="MyAnimal.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DirectSound.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\GameTest.ico">
@@ -74,5 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\kiss the rain.wav">
+      <Filter>资源文件</Filter>
+    </Media>
   </ItemGroup>
 </Project>

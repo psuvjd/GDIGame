@@ -5,10 +5,11 @@
 #include "MyCreature.h"
 #include "MyAnimal.h"
 #include "MyScenery.h"
+#include "DirectSound.h"
 
 #define FREQUENCY_TIMER 50
-//#define PATH_PIC "pic/"
-#define PATH_PIC "../GameTest/pic/"
+#define PATH_PIC "pic/"
+//#define PATH_PIC "../GameTest/pic/"
 
 
 // CGameTestDlg ¶Ô»°¿ò
@@ -58,6 +59,7 @@ private:
 	HDC m_hDCMemBitmap;
 	HBITMAP m_hBitmap;
 	HBITMAP m_hEmptyBitmap; // ¿Õ°×±³¾°
+	CDirectSound m_dsBgSound;
 public:
 	afx_msg void OnBnClickedAddanimal();
 };
